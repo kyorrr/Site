@@ -1,0 +1,48 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<section id="description" class="section-with-image">
+    <a class="section-anchor" id="description-anchor"></a>
+    <div class="content">
+        <div class="image-container">
+            <img src="{% static 'store/new_shop.jpg' %}" alt="Изображение магазина">
+        </div>
+        <div class="text-container">
+            <h2>О магазине</h2>
+            <p>Наш строительный магазин предлагает широкий ассортимент товаров для строительства и ремонта. У нас вы найдете все необходимое для воплощения ваших идей и проектов.</p>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="section-with-image">
+    <a class="section-anchor" id="about-anchor"></a>
+    <div class="content reverse">
+        <div class="image-container">
+            <img src="{% static 'store/new_about.jpg' %}" alt="О нас">
+        </div>
+        <div class="text-container">
+            <h2>О нас</h2>
+            <p>Мы — команда профессионалов, которые работают на рынке строительных материалов уже более 10 лет. Наши специалисты всегда готовы помочь вам с выбором и предоставить квалифицированную консультацию.</p>
+        </div>
+    </div>
+</section>
+
+<section id="catalog" class="center-content">
+    <a class="section-anchor" id="catalog-anchor"></a>
+    <h2 class="catalog-title">Наши товары</h2>
+    <div class="product-list">
+        {% for product in products %}
+        <div class="product" data-product-id="{{ product.id }}">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            <h3>{{ product.name }}</h3>
+            <p class="description">{{ product.description|truncatewords:20 }}</p>
+            <p class="stock">Остаток: {{ product.stock }}</p>
+            <p class="price">{{ product.price }} руб.</p>
+            <button class="buy-button">Купить</button>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

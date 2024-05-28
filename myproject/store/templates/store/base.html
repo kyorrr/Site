@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Строительный двор</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+<body class="{% if user.is_authenticated %}authenticated{% endif %}">
+    <header>
+        <div class="logo-title">
+            <img src="{% static 'store/new_logo.png' %}" alt="Новый Логотип" class="logo">
+        </div>
+        <nav>
+            <ul>
+                {% block nav_links %}
+                    {% if request.path == '/login/' %}
+                        <li><a href="{% url 'register' %}">Регистрация</a></li>
+                    {% elif request.path == '/register/' %}
+                        <li><a href="{% url 'login' %}">Вход</a></li>
+                    {% else %}
+                        <li><a href="#description">О магазине</a></li>
+                        <li><a href="#about">О нас</a></li>
+                        <li><a href="#catalog">Каталог</a></li>
+                        <li><a href="#" id="cart-link">Корзина</a>
+                            <div id="cart-dropdown" class="dropdown-content">
+                                <h2>Ваша корзина</h2>
+                                {% if user.is_authenticated %}
+                                    <div id="cart-items">
+                                        <p>Здесь будут отображаться товары, которые вы добавили в корзину.</p>
+                                    </div>
+                                    <div id="cart-total-price"></div>
+                                    <button class="buy-button" id="buy-button">Купить</button>
+                                {% else %}
+                                    <p>Для добавления товаров в корзину, пожалуйста, <a href="{% url 'login' %}" style="color: #ff6600;">войдите</a> или <a href="{% url 'register' %}" style="color: #ff6600;">зарегистрируйтесь</a>.</p>
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'profile' %}">Личный кабинет</a></li>
+                            <li><a href="{% url 'logout' %}" class="logout-link">Выход</a></li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}">Вход</a></li>
+                            <li><a href="{% url 'register' %}">Регистрация</a></li>
+                        {% endif %}
+                    {% endif %}
+                {% endblock %}
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <script src="{% static 'store/script.js' %}"></script>
+    <div id="loading-screen">
+        <div class="loading-spinner"></div>
+    </div>
+    <div id="custom-alert" class="custom-alert hide">
+        <p></p>
+    </div>
+</body>
+</html>
