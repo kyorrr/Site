@@ -39,10 +39,9 @@
             <p class="description">{{ product.description|truncatewords:20 }}</p>
             <p class="stock">Остаток: {{ product.stock }}</p>
             <p class="price">{{ product.price }} руб.</p>
-            <button class="buy-button">Купить</button>
+            <button class="buy-button">Добавить в корзину</button>
         </div>
         {% endfor %}
     </div>
 </section>
-
 {% endblock %}

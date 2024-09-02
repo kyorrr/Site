@@ -331,16 +331,10 @@ section {
 }
 
 .submit-button {
-    background-color: #007bff; /* Синий цвет */
+    background-color: #ff6600;
     color: white;
     border: none;
     padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-    width: 50%; /* Устанавливаем ширину 50% */
-    margin: 20px auto; /* Центрируем кнопку */
-    box-sizing: border-box;
     font-size: 1em;
     cursor: pointer;
     border-radius: 5px;
@@ -348,7 +342,7 @@ section {
 }
 
 .submit-button:hover {
-    background-color: #0056b3;
+    background-color: #cc5200;
 }
 
 .back-link {
@@ -409,7 +403,6 @@ section {
     text-align: center;
     margin-right: 10px;
 }
-
 /* Другие стили остаются без изменений */
 
 /* Стили для кнопки "Купить" */
@@ -452,51 +445,12 @@ input[type="number"].quantity-input::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-/* Другие стили остаются без изменений */
-
-/* Стили для кнопки удаления товара */
-.remove-item {
-    background: none;
+/* Стили для кнопки удаления */
+.remove-button {
+    background-color: transparent;
     border: none;
     color: red;
     font-size: 1.5em;
     cursor: pointer;
-    margin-left: auto; /* Добавляем отступ слева, чтобы переместить кнопку вправо */
-    align-self: flex-start; /* Выравниваем по верху */
-}
-
-.remove-item:hover {
-    color: darkred;
-}
-
-.back-button {
-    background-color: #ff6600;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-    width: 50%; /* Устанавливаем ширину 50% */
-    margin: 20px auto; /* Центрируем кнопку */
-    box-sizing: border-box;
-    font-size: 1em;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    text-align: center;
-}
-
-.back-button:hover {
-    background-color: #cc5200;
-}
-
-.profile-container {
-    max-width: 600px; /* Ограничиваем максимальную ширину контейнера */
-    margin: 0 auto; /* Центрируем контейнер */
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-left: 10px;
 }

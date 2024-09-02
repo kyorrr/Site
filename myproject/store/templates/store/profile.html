@@ -1,56 +1,53 @@
-{% extends 'store/base.html' %}
+{% extends "store/base.html" %}
 
 {% block content %}
-<div class="profile-container">
-    <h2>Личный кабинет</h2>
-    <form method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="username">Имя пользователя</label>
-            <input type="text" id="username" name="username" value="{{ user.username }}">
-        </div>
-        <div class="form-group">
-            <label for="email">Электронная почта</label>
-            <input type="email" id="email" name="email" value="{{ user.email }}">
-        </div>
-        <div class="form-group">
-            <label for="first_name">Имя</label>
-            <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}">
-        </div>
-        <div class="form-group">
-            <label for="last_name">Фамилия</label>
-            <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}">
-        </div>
-        <div class="form-group">
-            <label for="phone">Телефон</label>
-            <input type="text" id="phone" name="phone" value="{{ profile.phone }}">
-        </div>
-        <div class="form-group">
-            <label for="middle_name">Отчество</label>
-            <input type="text" id="middle_name" name="middle_name" value="{{ profile.middle_name }}">
-        </div>
-        <button type="submit" class="submit-button">Сохранить изменения</button>
-    </form>
-    <h2>Ваши заказы</h2>
-    <div class="orders-container">
-        {% for order in orders %}
-        <div class="order">
-            <h3>Заказ от {{ order.formatted_date }}</h3>
-            <p>Общая стоимость: {{ order.total_price }} руб.</p>
-            <ul>
-                {% for item in order.orderitem_set.all %}
-                <li>{{ item.product.name }} - {{ item.quantity }} шт. - {{ item.total_price }} руб.</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% empty %}
-        <p>У вас пока нет заказов.</p>
-        {% endfor %}
+<h2>Личный кабинет</h2>
+<form method="post" action="{% url 'profile' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}" required class="form-control">
     </div>
-</div>
-{% endblock %}
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ user.email }}" required class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="first_name">Имя:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="last_name">Фамилия:</label>
+        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="phone">Телефон:</label>
+        <input type="text" id="phone" name="phone" value="{{ profile.phone }}" required class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="middle_name">Отчество:</label>
+        <input type="text" id="middle_name" name="middle_name" value="{{ profile.middle_name }}" required class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+</form>
 
-{% block nav_links %}
-    <li><a href="{% url 'index' %}">На главную</a></li>
-    <li><a href="{% url 'logout' %}" class="logout-link">Выход</a></li>
+<h3>Ваши заказы</h3>
+{% if orders %}
+    <ul>
+        {% for order in orders %}
+            <li>
+                <p>Заказ от {{ order.created_at|date:"d E Y, H:i" }}</p>
+                <p>Адрес: {{ order.address }}</p>
+                <p>Способ оплаты: {{ order.payment_method }}</p>
+                <ul>
+                    {% for item in order.items.all %}
+                        <li>{{ item.product.name }} - {{ item.quantity }} шт. по цене {{ item.price }} руб.</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>У вас пока нет заказов.</p>
+{% endif %}
 {% endblock %}

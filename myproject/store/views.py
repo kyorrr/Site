@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -64,17 +65,7 @@ def profile_view(request):
         request.user.save()
         user_profile.save()
         return redirect('profile')
-
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
-
-    # Установите локаль и активируйте перевод
-    locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
-    translation.activate('ru')
-
-    # Преобразование даты заказа в нужный формат
-    for order in orders:
-        order.formatted_date = date_format(order.created_at, format='d E Y, H:i', use_l10n=True)
-
     return render(request, 'store/profile.html', {'user': request.user, 'profile': user_profile, 'orders': orders})
 
 @login_required
@@ -185,3 +176,51 @@ def purchase(request):
     cart.total_price = 0
     cart.save()
     return JsonResponse({'success': True})
+
+@login_required
+def order_form(request):
+    if request.method == 'POST':
+        address = request.POST['address']
+        payment_method = request.POST['payment_method']
+
+        cart = get_object_or_404(Cart, user=request.user)
+        order = Order.objects.create(
+            user=request.user,
+            address=address,
+            payment_method=payment_method,
+            created_at=timezone.now()
+        )
+
+        for item in cart.cartitem_set.all():
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.price
+            )
+            item.product.stock -= item.quantity
+            item.product.save()
+            item.delete()
+        
+        cart.total_price = 0
+        cart.save()
+        
+        return redirect('profile')
+
+    return render(request, 'store/order_form.html')
+
+@login_required
+def submit_order(request):
+    if request.method == 'POST':
+        address = request.POST['address']
+        payment_method = request.POST['payment_method']
+        
+        cart = Cart.objects.get(user=request.user)
+        order = Order.objects.create(user=request.user, address=address, payment_method=payment_method)
+        
+        for item in cart.cartitem_set.all():
+            OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity, price=item.product.price)
+        
+        cart.cartitem_set.all().delete()
+        
+        return redirect('profile')
